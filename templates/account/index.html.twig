@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <h1>Vos informations</h1>
+
+    <table class="table">
+            <tr>
+                <th>Nom</th>
+                <td>{{ app.user}}</td>
+            </tr>
+            
+
+        </tbody>
+    </table>
+    <a class="btn btn-info" href="{{ path('user_edit', {'id': 'toto'}) }}">Modifier</a>
+    <a class="btn btn-info" href="{{ path('booking_new') }}">Passer une réservation</a>
+    <a class="btn btn-info" href="{{ path('account_bookings') }}">Voir mes réservations</a>
+</div>
+{% endblock %}

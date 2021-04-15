@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Attractions{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1>Nos attractions</h1>    
+    <div class="col-md-10">
+        <div class="row">
+        {% for attraction in attractions %}
+            <div class="col-md-4 attraction-container align-center">
+                <div class="text-center">
+                    <a href="{{ path('show_one_attraction',{ 'slug' : attraction.slug }) }}">
+                        <img class="attraction-image" src="/uploads/{{attraction.image}}" alt="{{attraction.title}}" class="img-fluid" />
+                    </a>
+                    <h3>{{ attraction.title }}</h3>     
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

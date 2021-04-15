@@ -1,0 +1,8 @@
+{# templates/booking/calendar.html.twig #}
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+<div class="container">
+    <a href="{{ path('booking_new') }}">Create new booking</a>
+    <div id="calendar-holder"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - Réservations{% endblock %}
+
+{% block body %}
+<div class="container">
+ <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Référence</th>
+            <th scope="col">Date</th>
+            <th scope="col">Nb de places</th>
+            <th scope="col">Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody> 
+
+    <tr>
+        <td>{{ booking.bookingRef }}</td>
+        <td>{{ booking.date|date("m/d/Y", "Europe/Paris")}}</td>
+        <td>{{ booking.nbOfSeats }}</td>
+        <td>{{ booking.totalBookingPrice }} €</td>
+        <td><a class="btn btn-sm btn-info" href="{{ path('booking_edit', {'id': booking.id}) }}">Modifier</a></td>  
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}
