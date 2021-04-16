@@ -37,50 +37,8 @@ class BookingController extends AbstractController
     }
 
 
-    /**
-     * @Route("/calendar", name="booking_calendar", methods={"GET"})
-     */
-    public function calendar(BookingRepository $br): Response
-    {
-        /*$bookings = $br->findByDate('2021-04-01 00:00:00', '2021-04-31 00:00:00');
-        foreach($bookings as $booking){
-            dd(new \DateTime($booking['date']));
-        }*/
-
-        return $this->render('booking/calendar.html.twig');
-    }
-    /**
-     * @Route("/test", name="test", methods={"GET"})
-     */
-    public function test(BookingRepository $br): Response
-    {
-        $bookings = $br->findAll();
-        $datas = array();
-        $erreur = "";
-
-        if ($bookings == null) {
-            $erreur = "aucune donnée à afficher";
-        }
-        
-
-        foreach($bookings as $key => $booking) {
-
-            $datas[$key]['title']= $booking->getNbOfSeats();
-            $dateBegin = $booking->getBeginAt();
-            
-            $test = $dateBegin->format('Y-m-d');
-            
-            $datas[$key]['start']= $test;
-            dd($datas);
-            $dateEnd = $booking->getEndAt();
-            
-            $datas[$key]['end']= $dateEnd->format('Y-m-d');
-        }
-        $reponse = $datas;
-        
-        return new JsonResponse($reponse );
-    }
-
+    
+    
     /**
      * @Route("/", name="booking_index", methods={"GET"})
      */
