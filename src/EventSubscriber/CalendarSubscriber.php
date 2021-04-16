@@ -66,7 +66,6 @@ class CalendarSubscriber implements EventSubscriberInterface
             // this create the events with your data (here booking data) to fill calendar
             // this create the events with your data (here booking data) to fill calendar
             $bookingEvent = new Event(
-
                 $entries,
                 $booking['beginAt'],
                 $booking['endAt']// If the end date is null or not defined, a all day event is created.
@@ -78,10 +77,23 @@ class CalendarSubscriber implements EventSubscriberInterface
              * For more information see: https://fullcalendar.io/docs/event-object
              * and: https://github.com/fullcalendar/fullcalendar/blob/master/src/core/options.ts
              */
+
             
+            $eventcolor = "";
+            if ($entries >= 100) {
+                $eventcolor ='green';
+            } elseif($entries < 100 && $entries >= 50) {
+                $eventcolor ='yellow';
+            } elseif($entries < 50 && $entries >= 1) {
+                $eventcolor ='orange';
+            } elseif($entries < 1) {
+                $eventcolor ='red';
+            }
             $bookingEvent->setOptions([
-                'backgroundColor' => 'green',
+                'backgroundColor' => $eventcolor,
+                'textColor' => 'black',
                 'borderColor' => 'green',
+                'display'=>'background',
                 'allDay'=>true
             ]);
             

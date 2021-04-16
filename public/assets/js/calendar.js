@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     var calendarEl = document.getElementById('calendar-holder');
     var eventsUrl = calendarEl.dataset.eventsUrl;
-    console.log(eventsUrl);
+    
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: '2014-11-10',
         initialView:'timeGridWeek',

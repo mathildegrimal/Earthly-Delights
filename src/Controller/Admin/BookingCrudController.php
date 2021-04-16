@@ -4,6 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Booking;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class BookingCrudController extends AbstractCrudController
 {
@@ -12,14 +17,18 @@ class BookingCrudController extends AbstractCrudController
         return Booking::class;
     }
 
-    /*
+    
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            DateTimeField::new('date'),
+            IntegerField::new('nbOfSeats')
+                ->setFormType(IntegerType::class, ['attr' => ['min' => 1, 'max' => 10]]),
+            TextField::new('bookingRef'),
+            NumberField::new('totalBookingPrice'),
+            DateTimeField::new('beginAt'),
+            DateTimeField::new('endAt')
         ];
     }
-    */
+    
 }

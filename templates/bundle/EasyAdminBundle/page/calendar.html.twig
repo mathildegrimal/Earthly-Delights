@@ -2,7 +2,11 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block page_content %}
 <div class="container">
-    <a href="{{ path('booking_new') }}">Create new booking</a>
+    <div class="mb-3">Days without colors have no bookings</div>
+    <div>Green : remaining seats > 100</div>
+    <div>Yellow : remaining seats > 50</div>
+    <div>Orange : remaining seats > 1</div>
+    <div class="mb-3">Red : no seats left</div>
     <div 
         id="calendar-holder"
         data-events-url="{{ path('fc_load_events') }}"
