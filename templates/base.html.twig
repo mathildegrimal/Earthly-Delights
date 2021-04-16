@@ -15,6 +15,8 @@
 
     <!-- Custom styles for our template -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-theme.css') }}" media="screen">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.css') }}">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
@@ -187,6 +189,9 @@
 
     <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
     {% block javascripts %}
+    <script type="text/javascript" src={{ asset('assets/js/bootstrap-datepicker.js') }}></script>
+    
+    <script type="text/javascript" src={{ asset('assets/js/bootstrap-datepicker.min.js') }}></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
@@ -194,6 +199,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
 
     <script type="text/javascript">
+
+    
+        jQuery(document).ready(function() {
+            // you may need to change this code if you are not using Bootstrap Datepicker
+            $('.js-datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                maxViewMode: 2,
+                starDate:"+1d",
+                todayBtn:"linked",
+                language:"fr",
+                todayHighlight: true
+
+
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             var calendarEl = document.getElementById('calendar-holder');
 

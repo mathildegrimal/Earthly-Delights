@@ -49,9 +49,20 @@ class Attraction
      */
     private $rates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="attraction")
+     */
+    private $categories;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="attractions")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->rates = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +155,48 @@ class Attraction
                 $rate->setAttraction(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setAttraction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getAttraction() === $this) {
+                $category->setAttraction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
