@@ -45,14 +45,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav pull-right">
                     <li class="active"><a href="{{ path('home') }}">Home</a></li>
-                    <li><a href="about.html.twig">Actualités</a></li>
+                    <li><a href="{{ path('about')}}">A propos de nous</a></li>
                     <li><a href="{{ path('attractions')}}">Attractions</a></li>
                     <li><a href="{{ path('booking_new')}}">Réserver</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li class="dropdown">
                     {% if app.user %}
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon compte<b class="caret"></b></a></a>
-                        <ul class="dropdown-menu">                        
+                        <ul class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a class="dropdown-item" href="/admin">Admin</a></li>
+                            {% endif %}                     
                             <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
                             <li><a class="dropdown-item" href="{{ path('account') }}">Mes infos</a></li>
                             <li><a class="dropdown-item" href="{{ path('account_bookings', { 'id':app.user.id }) }}">Mes réservations</a></li>   
@@ -77,7 +80,7 @@
             <div class="row">
                 <h1 class="lead">Park of Earthly Delights</h1>
                 <p class="tagline">The first park on Bosch's Garden of Earthly Delights, unique on earth</p>
-                <a class="btn btn-default btn-lg" role="button">MORE INFO</a>
+                <a class="btn btn-primary btn-lg" href="{{ path('about')}}" role="button">+ d'infos</a>
             </div>
         </div>
     </header>

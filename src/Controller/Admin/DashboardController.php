@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Booking;
 use App\Entity\Park;
 use App\Entity\Attraction;
-use App\Entity\Category;
 use App\Entity\User;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -34,12 +33,12 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linkToRoute('Front Home', 'fas fa-sitemap', 'home');
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Attraction', 'fas fa-gamepad', Attraction::class);
         yield MenuItem::linkToCrud('Park', 'fas fa-parachute-box', Park::class);
-        yield MenuItem::linkToCrud('Booking', 'far fa-calendar-plus', Booking::class);
-        yield MenuItem::linkToCrud('AttractionCategory', 'fas fa-list', Category::class);
+        yield MenuItem::linkToCrud('Booking', 'fas fa-list', Booking::class);
         yield MenuItem::linkToRoute('Calendar', 'far fa-calendar', 'booking_calendar_admin');
     }
 

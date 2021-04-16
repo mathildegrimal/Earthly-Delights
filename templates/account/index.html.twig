@@ -8,15 +8,18 @@
     <h1>Vos informations</h1>
 
     <table class="table">
+        <tbody>
             <tr>
-                <th>Nom</th>
-                <td>{{ app.user}}</td>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
             </tr>
-            
-
+            <tr>
+                <th>Password</th>
+                <td>{{ user.password }}</td>
+            </tr>
         </tbody>
     </table>
-    <a class="btn btn-info" href="{{ path('user_edit', {'id': 'toto'}) }}">Modifier</a>
+    <a class="btn btn-info" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
     <a class="btn btn-info" href="{{ path('booking_new') }}">Passer une réservation</a>
     <a class="btn btn-info" href="{{ path('account_bookings') }}">Voir mes réservations</a>
 </div>
