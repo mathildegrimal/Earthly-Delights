@@ -3,6 +3,9 @@
 {% block page_content %}
 <div class="container">
     <a href="{{ path('booking_new') }}">Create new booking</a>
-    <div id="calendar-holder"></div>
+    <div 
+        id="calendar-holder"
+        data-events-url="{{ path('fc_load_events') }}"
+    ></div>
 </div>
 {% endblock %}

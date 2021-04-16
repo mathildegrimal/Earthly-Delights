@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     var calendarEl = document.getElementById('calendar-holder');
-
+    var eventsUrl = calendarEl.dataset.eventsUrl;
+    console.log(eventsUrl);
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: '2014-11-10',
         initialView:'timeGridWeek',
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         eventSources: [
             {
-                url: "{{ path('fc_load_events') }}",
+                url: eventsUrl,
                 method: "POST",
                 extraParams: {
                     filters: JSON.stringify({})
