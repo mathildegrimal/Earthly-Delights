@@ -15,6 +15,8 @@
 
     <!-- Custom styles for our template -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-theme.css') }}" media="screen">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.css') }}">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
@@ -31,54 +33,62 @@
 
 <body class="home">
 
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top headroom">
-        <div class="container">
-            <div class="navbar-header">
-                <!-- Button for smallest screens -->
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span
-                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-                <a class="logo-custom" href="index.html">Park of Earthly Delights</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav pull-right">
-                    <li class="active"><a href="{{ path('home') }}">Home</a></li>
-                    <li><a href="about.html.twig">Actualités</a></li>
-                    <li><a href="{{ path('attractions')}}">Attractions</a></li>
-                    <li><a href="{{ path('booking_new')}}">Réserver</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li class="dropdown">
-                    {% if app.user %}
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon compte<b class="caret"></b></a></a>
-                        <ul class="dropdown-menu">                        
-                            <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
-                            <li><a class="dropdown-item" href="{{ path('account') }}">Mes infos</a></li>
-                            <li><a class="dropdown-item" href="{{ path('account_bookings', { 'id':app.user.id }) }}">Mes réservations</a></li>   
-                        {% else %}
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Inscription / Connexion<b class="caret"></b></a></a>
-                        <ul class="dropdown-menu">  
-                            <li><a class="dropdown-item" href="{{ path('app_login') }}">Se connecter</a></li>
-                            <li><a class="dropdown-item" href="{{ path('user_new') }}">S'inscrire</a></li>
-                        {% endif %}
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
-        </div>
-    </div>
-    <!-- /.navbar -->
+     
 
     <!-- Header -->
-    <header id="head">
-        <div class="container">
-            <div class="row">
-                <h1 class="lead">Park of Earthly Delights</h1>
-                <p class="tagline">The first park on Bosch's Garden of Earthly Delights, unique on earth</p>
-                <a class="btn btn-default btn-lg" role="button">MORE INFO</a>
+    <div class="menu">
+        <div class="menuMobile">
+            <div class="toggleMenu">
+                <img src={{ asset('assets/images/menuMobile.svg') }} />
+                <div class="navMobile">
+                    <div class="menuItem"><a href="{{ path('home')}}">Accueil</a></div>
+                    <div class="menuItem"><a href="{{ path('about')}}">A propos</a></div>
+                    <div class="menuItem"><a href="{{ path('attractions')}}">Attractions</a></div>
+                    <div class="menuItem"><a href="{{ path('booking_new')}}">Réserver</a></div>
+                    <div class="menuItem"><a href="contact.html">Contact</a></div>
+                </div>
             </div>
         </div>
-    </header>
+        
+        <div class="logo">
+            <a href="{{ path('home')}}"><svg xmlns="http://www.w3.org/2000/svg" width="232" height="115" viewBox="0 0 232 115">
+                <g id="Groupe_7" data-name="Groupe 7" transform="translate(627 -19)">
+                    <text id="Le_Jardin_des_Délices" data-name="Le Jardin
+                des Délices" transform="translate(-511 71)" fill="#fff" font-size="30" font-family="SketchGothicSchool, Sketch Gothic School"><tspan x="-95.979" y="0">Le</tspan><tspan y="0" xml:space="preserve" font-size="62"> Jardin</tspan><tspan font-size="62"><tspan x="-115.66" y="50">des Délices</tspan></tspan></text>
+                </g>
+            </svg></a>
+        </div>
+        <div class="nav">
+            <div class="menuItem"><a href="{{ path('about')}}">A propos</a></div>
+            <div class="menuItem"><a href="{{ path('attractions')}}">Attractions</a></div>
+            <div class="menuItem"><a href="{{ path('booking_new')}}">Réserver</a></div>
+            <div class="menuItem"><a href="contact.html">Contact</a></div>
+        </div>
+        <div class="login">
+        {% if app.user %}
+            <div class="dropdown"><span>Mon compte<b class="caret"></b></span>
+                <div class="dropdown-content">
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="dropdown-item" href="/admin">Admin</a></div>
+                    {% endif %} 
+                    <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    <a class="dropdown-item" href="{{ path('account') }}">Mes infos</a>
+                    <a class="dropdown-item" href="{{ path('account_bookings', { 'id':app.user.id }) }}">Mes réservations</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="dropdown"><span>Inscription / Connexion<b class="caret"></b></span>
+                <div class="dropdown-content">
+                    <a class="dropdown-item" href="{{ path('app_login') }}">Se connecter</a>
+                    <a class="dropdown-item" href="{{ path('user_new') }}">S'inscrire</a>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+    <div class="header">
+        <img src={{ asset('assets/images/header@2x.png') }} />
+    </div>
     <!-- /Header -->
     
             {% block body %} {% endblock %}
@@ -187,6 +197,9 @@
 
     <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
     {% block javascripts %}
+    <script type="text/javascript" src={{ asset('assets/js/bootstrap-datepicker.js') }}></script>
+    
+    <script type="text/javascript" src={{ asset('assets/js/bootstrap-datepicker.min.js') }}></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
@@ -194,43 +207,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
 
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            var calendarEl = document.getElementById('calendar-holder');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialDate: '2014-11-10',
-                initialView:'timeGridWeek',
-                editable: true,
-                events : [
-                    {
-                        start: '2014-11-10T10:00:00',
-                        end: '2014-11-10T16:00:00',
-                        display:'background'
-                    }
-                ],
-                eventSources: [
-                    {
-                        url: "{{ path('fc_load_events') }}",
-                        method: "POST",
-                        extraParams: {
-                            filters: JSON.stringify({})
-                        },
-                        failure: () => {
-                            // alert("There was an error while fetching FullCalendar!");
-                        },
-                    },
-                ],
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                },
-                plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
-                timeZone: 'UTC',
-            });
-            calendar.render();
-        });
     
+        jQuery(document).ready(function() {
+            // you may need to change this code if you are not using Bootstrap Datepicker
+            $('.js-datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                maxViewMode: 2,
+                starDate:"+1d",
+                todayBtn:"linked",
+                language:"fr",
+                todayHighlight: true
+
+
+            });
+        });
+
+        
 
     var $star_rating = $('.star-rating .fa');
 

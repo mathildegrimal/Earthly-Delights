@@ -4,26 +4,19 @@
 
 {% block body %}
 
-{% if app.user %}
-        
-    
-        
+
     <div class="container">
+    {% if app.session.flashBag.has('erreur') %}
+    {% for msg in app.session.flashBag.get('erreur') %}
+    <div class="alert-danger">'{{msg}}'</div>
+    {% endfor %}
+    {% endif %}
         <h1>Passer une réservation</h1>
         <h4>Réservez vos entrées au Parc, à la date que vous souhaitez</h4>
         {{ include('booking/_form.html.twig') }}
     </div>
 
     
-
-{% else %}
-    <div class="container">
-    <h1>Passer une réservation</h1>
-    <div class="alert alert-danger">Vous devez être connecté pour passer une réservation</div>
-    <a class="btn btn-action btn-lg" href="{{ path('app_login')}}/#connexion">Se connecter</a>
-    </div>
-
-{% endif %}
 
     
 {% endblock %}

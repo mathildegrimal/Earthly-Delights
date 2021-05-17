@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 use App\Entity\Attraction;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
@@ -27,6 +28,7 @@ class AttractionCrudController extends AbstractCrudController
         return [
             //IdField::new('id'),
             TextField::new('title'),
+            AssociationField::new('category'),
             TextField::new('description')
                 ->setFormType(TextareaType::class, ['attr' => ['size' => '5', 'rows' => '10']]),
             SlugField::new('slug')->setTargetFieldName('title'),

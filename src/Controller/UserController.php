@@ -19,8 +19,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
 
-    
-    
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
@@ -62,10 +60,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            
             $user->setPassword(
                 $passwordEncoder->encodePassword($user, $user->getPassword()));
-            return $this->redirectToRoute('user_index');
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('user/edit.html.twig', [

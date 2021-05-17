@@ -10,6 +10,8 @@ use App\Entity\Booking;
 use App\Form\BookingType;
 use App\Repository\BookingRepository;
 use DateTime;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,70 +30,8 @@ class BookingController extends AbstractController
      */
     public function calendarAdmin(BookingRepository $br): Response
     {
-        /*$bookings = $br->findByDate('2021-04-01 00:00:00', '2021-04-31 00:00:00');
-        foreach($bookings as $booking){
-            dd(new \DateTime($booking['date']));
-        }*/
-
         return $this->render('bundle/EasyAdminBundle/page/calendar.html.twig');
     }
-
-
-    /**
-     * @Route("/calendar", name="booking_calendar", methods={"GET"})
-     */
-    public function calendar(BookingRepository $br): Response
-    {
-        /*$bookings = $br->findByDate('2021-04-01 00:00:00', '2021-04-31 00:00:00');
-        foreach($bookings as $booking){
-            dd(new \DateTime($booking['date']));
-        }*/
-
-        return $this->render('booking/calendar.html.twig');
-    }
-    /**
-     * @Route("/test", name="test", methods={"GET"})
-     */
-    public function test(BookingRepository $br): Response
-    {
-        $bookings = $br->findAll();
-        $datas = array();
-        $erreur = "";
-
-        if ($bookings == null) {
-            $erreur = "aucune donnée à afficher";
-        }
-        
-
-        foreach($bookings as $key => $booking) {
-
-            $datas[$key]['title']= $booking->getNbOfSeats();
-            $dateBegin = $booking->getBeginAt();
-            
-            $test = $dateBegin->format('Y-m-d');
-            
-            $datas[$key]['start']= $test;
-            dd($datas);
-            $dateEnd = $booking->getEndAt();
-            
-            $datas[$key]['end']= $dateEnd->format('Y-m-d');
-        }
-        $reponse = $datas;
-        
-        return new JsonResponse($reponse );
-    }
-
-    /**
-     * @Route("/", name="booking_index", methods={"GET"})
-     */
-    /*
-    public function index(BookingRepository $bookingRepository): Response
-    {
-        return $this->render('booking/index.html.twig', [
-            'bookings' => $bookingRepository->findAll(),
-        ]);
-    }
-    */
 
     /**
      * @Route("/new", name="booking_new", methods={"GET","POST"})
@@ -105,40 +45,80 @@ class BookingController extends AbstractController
         
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($this->getUser()==null){
-                return $this->redirectToRoute('app_login');
-            }
             $user = $this->getUser();
-            //$booking = $form->getData();
             
-            
-            $date=$booking->getDate();
-            $booking->setBeginAt($date);
-            $booking->setEndAt($date);
-            
-            $sess = $request->getSession();
-            
-            if($bookingService->newBooking($booking, $user)){
-                $date=$booking->getDate();
+            if($bookingService->seatsAvailable($booking)){
                 
-                $dateString=$date->format('d/m/Y');
-                $nbOfSeats = $booking->getNbOfSeats();
-                $totalPrice = $booking->getTotalBookingPrice();
-                $sess->getFlashBag()->add("ajout", "La réservation de ".$nbOfSeats." places pour un total de ".$totalPrice." € a été ajoutée pour le ".$dateString);
+                $booking->setIspaid(false);
+                $date=$booking->getDate();
+                $booking->setBeginAt($date);
+                $booking->setEndAt($date);
+                $bookingService->setTotalEntryPrice($booking);
+                $bookingService->setBookingRef($booking,$user);
+                $bookingService->newBooking($booking, $user);
+
+                return $this->render('booking/preview.html.twig', [
+                    'booking' => $booking
+                ]);
             } else {
+                $sess = $request->getSession();
                 $sess->getFlashBag()->add("erreur", "Réservation impossible, plus de places disponibles pour la journée");
+                return $this->render('booking/new.html.twig', [
+                    'booking' => $booking,
+                    'form' => $form->createView(),
+                ]);
             }
-              
-
-            return $this->redirectToRoute('account_bookings');
         }
-
-        
         return $this->render('booking/new.html.twig', [
             'booking' => $booking,
             'form' => $form->createView(),
         ]);
+
     }
+
+    /**
+     * @Route("/confirm/{bookingRef}", name="booking_confirm")
+     */
+    public function confirm(Request $request, BookingService $bookingService, BookingRepository $bookingRepository,  $bookingRef): Response
+    {
+        $booking = $bookingRepository->findOneByBookingRef($bookingRef);
+        $user = $this->getUser();
+        
+        $nbOfSeats = $booking->getNbOfSeats();
+        $totalPrice = $booking->getTotalBookingPrice();
+        
+        $YOUR_DOMAIN = 'http://127.0.0.1:8000';
+        
+        $booking_for_stripe[]= [
+            'price_data' => [
+            'currency' => 'eur',
+            'unit_amount' => $bookingService->getEntryPrice(),
+            'product_data' => [
+                'name' => 'Réservation N°'.$booking->getBookingRef(),
+                'images' => [$YOUR_DOMAIN."/uploads/entrance.jpg"],
+            ],
+            ],
+            'quantity' => $booking->getNbOfSeats(),
+        ];
+
+        Stripe::setApiKey('sk_test_51IjM41CE0ZMoSikaUiafL9FyLNrpm2E4mSAWxZYz0F0ouDiQ3OkObZ4BOadmMRxBu17yDD0YZKYyYW6gDOtAlvlT00U2s7hpbR');
+    
+        $checkout_session = Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => [
+            $booking_for_stripe
+        ],
+        'mode' => 'payment',
+        'success_url' => $YOUR_DOMAIN . '/success.html',
+        'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+        ]);
+
+        dump($checkout_session->id);
+        dd($checkout_session);
+
+            
+    }
+
     
     /**
      * @Route("/{id}", name="booking_show", methods={"GET"})
