@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <h1>Voici  les détails de votre réservation<h1>
+        <h3>Validez pour la confirmer et procéder au paiement</h3>
+            <h4>Référence : {{booking.bookingRef}}</h4>
+            <h4>Date : {{booking.date |date('d/m/Y')}}</h4>
+            <h4>Nombre de Places : {{booking.nbOfSeats}}</h4>
+            <h4>Total : {{booking.totalBookingPrice / 100}} €</h4>
+    <a class="btn btn-success btn-lg" href="{{ path('booking_confirm',{'bookingRef': booking.bookingRef})}}" role="button">Valider</a>
+    </div>
+    
+
+    
+
+    
+{% endblock %}
+

@@ -61,6 +61,11 @@ class Booking
      */
     private $endAt = null;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $ispaid;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -163,6 +168,18 @@ class Booking
     public function setEndAt(?\DateTimeInterface $endAt = null): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getIspaid(): ?bool
+    {
+        return $this->ispaid;
+    }
+
+    public function setIspaid(?bool $ispaid): self
+    {
+        $this->ispaid = $ispaid;
 
         return $this;
     }

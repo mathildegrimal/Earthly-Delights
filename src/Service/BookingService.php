@@ -12,11 +12,17 @@ class BookingService {
     private $entityManager;
     private $park;
     private $capacity;
+    private $entryPrice;
 
     public function __construct(EntityManagerInterface $entityManager){
         $this->entityManager = $entityManager;
         $this->park = $this->entityManager->getRepository(Park::class)->findAll();
         $this->capacity = $this->park[0]->getCapacity();
+        $this->entryPrice = $this->park[0]->getEntryPrice();
+    }
+
+    public function getEntryPrice(): ?float {
+        return $this->entryPrice;
     }
         
     public function newBooking($booking,$user){
@@ -24,34 +30,31 @@ class BookingService {
        
         $this->setTotalEntryPrice($booking);         
         $this->setBookingRef($booking, $user);        
-        $totalOfDay = $this->seatsAvailable($booking);
-        
-        if($totalOfDay<$this->capacity){
-            $user->addBooking($booking);
-            $this->park[0]->addBooking($booking);
-            $this->park[0]->setTotalIncome();
-            $this->entityManager->persist($user);    
-            $this->entityManager->flush();
-            return true;
-        } elseif($totalOfDay>=$this->capacity){
-            return false;
-        }
+        $user->addBooking($booking);
+        $this->park[0]->addBooking($booking);
+        $this->park[0]->setTotalIncome();
+        $this->entityManager->persist($user);    
+        $this->entityManager->flush();
     }
 
     public function seatsAvailable($booking) {
         $date = $booking->getDate();
         $bookings = $this->entityManager->getRepository(Booking::class)->findBy(['date' => $date]);
         $totalOfDay = 0;
-        foreach($bookings as $b){
+        foreach ($bookings as $b) {
             $totalOfDay += $b->getNbOfSeats();
         }
-        return $totalOfDay;
+        if ($totalOfDay<$this->capacity) {
+            return true;
+        } elseif ($totalOfDay>=$this->capacity) {
+            return false;
+        }
     }
 
     public function setTotalEntryPrice($booking){
-        $entryPrice = $this->park[0]->getEntryPrice();
+       
         $nbOfSeats = $booking->getNbOfSeats();
-        $totalPrice = $entryPrice * $nbOfSeats;
+        $totalPrice = $this->entryPrice * $nbOfSeats;
         $booking->setTotalBookingPrice($totalPrice);
     }
 
